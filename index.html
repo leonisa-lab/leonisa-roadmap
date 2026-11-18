@@ -146,6 +146,8 @@
 
     .lt { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; }
     .lt h2 { margin:6px 0 10px; font-size:15px; }
+    .lt.fold > summary h2 { margin:6px 0 4px; }
+    .lt.fold[open] > summary { margin-bottom:6px; }
     .axis { display:flex; gap:10px; align-items:baseline; padding:9px 0; border-top:1px solid var(--line-2); font-size:12.5px; line-height:1.4; }
     .axis b { font-size:10px; color:var(--muted); min-width:18px; }
     .rule { padding:11px 0; border-top:1px solid var(--line-2); font-size:12.5px; line-height:1.45; color:var(--ink-2); }
@@ -173,23 +175,102 @@
       .close-grid { grid-template-columns:1fr; }
       .tl-seg { font-size:8.5px; }
     }
-    @media (max-width: 520px) {
-      .hd-in { padding:11px 16px; }
-      .brand img { height:16px; }
-      .brand strong { font-size:10px; }
-      .upd span { display:none; }
-      .body { padding:24px 16px 64px; }
-      .tl { padding:14px 12px 10px; }
-      .tl-bar { height:34px; }
-      .tl-seg { font-size:0; }
-      .tl-mark { font-size:9px; }
-      .swipe { display:inline; }
-      .days { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; margin:0 -16px; padding:2px 16px 6px; }
-      .days::-webkit-scrollbar { display:none; }
-      .day { flex:0 0 min(78vw, 290px); scroll-snap-align:center; }
-      .plan { grid-template-columns:1fr; }
-      .detail h2 { font-size:24px; }
-      .card ol, .card p { font-size:14.5px; }
+    /* ---------- Componentes móviles (ocultos en escritorio) ---------- */
+    .mphase, .fab { display:none; }
+    .fold > summary { list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .fold > summary::-webkit-details-marker { display:none; }
+    .fold .pm { font-size:20px; color:var(--muted); transition:transform .2s; }
+    .fold[open] .pm { transform:rotate(45deg); }
+
+    @media (max-width: 640px) {
+      .hd-in { padding:10px max(16px, env(safe-area-inset-left)); min-height:52px; }
+      .brand { gap:10px; }
+      .brand img { height:15px; }
+      .brand .sep { height:22px; }
+      .brand strong { font-size:10px; letter-spacing:.12em; }
+      .brand span { font-size:10px; }
+      .upd { font-size:0; gap:0; }
+      .upd span, .upd i { display:none; }
+      .upd::after { content:attr(data-short); font-size:11px; font-weight:800; letter-spacing:.06em; color:#d6d6d6; }
+      .body { padding:16px 16px calc(96px + env(safe-area-inset-bottom)); }
+      .tl { display:none; }
+
+      /* Tarjeta de avance de fase */
+      .mphase { display:block; background:var(--black); color:#fff; border-radius:18px; padding:16px; margin-bottom:12px; }
+      .mp-top { display:flex; justify-content:space-between; align-items:start; gap:10px; }
+      .mp-k { font-size:10px; letter-spacing:.14em; font-weight:800; color:#9a9a9a; }
+      .mp-t { font-size:19px; font-weight:850; letter-spacing:-.03em; margin-top:4px; line-height:1.15; }
+      .mp-pct { font-size:28px; font-weight:850; letter-spacing:-.04em; line-height:1; text-align:right; white-space:nowrap; }
+      .mp-pct small { display:block; font-size:10px; color:#9a9a9a; font-weight:700; letter-spacing:.06em; margin-top:4px; }
+      .mp-track { position:relative; height:8px; border-radius:99px; background:#333; margin:16px 0 8px; }
+      .mp-fill { position:absolute; top:0; bottom:0; left:0; border-radius:99px; background:#fff; }
+      .mp-pin { position:absolute; top:50%; width:11px; height:11px; background:#0b0b0b; border:2px solid #fff; transform:translate(-50%,-50%) rotate(45deg); }
+      .mp-dates { display:flex; justify-content:space-between; font-size:10.5px; color:#9a9a9a; font-weight:600; }
+      .mp-next { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+      .mp-box { background:#1f1f1f; border-radius:12px; padding:10px 12px; }
+      .mp-box b { display:block; font-size:16px; letter-spacing:-.02em; }
+      .mp-box span { font-size:11px; color:#a8a8a8; line-height:1.3; display:block; margin-top:2px; }
+
+      /* Semanas: barra fija bajo el encabezado */
+      .nav { position:sticky; top:52px; z-index:15; width:auto; max-width:none; margin:0 -16px 16px; padding:8px 16px; border:0; border-radius:0; background:rgba(243,243,242,.95); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--line); gap:6px; scroll-padding:0 16px; }
+      .tab { min-height:38px; padding:8px 14px; font-size:12px; background:var(--card); border:1px solid var(--line); }
+      .tab[aria-pressed="true"] { border-color:var(--black); }
+
+      /* Encabezado de semana */
+      .top { flex-direction:column; align-items:stretch; gap:14px; padding-bottom:16px; }
+      h1 { font-size:34px; margin:6px 0 8px; }
+      .obj { font-size:14.5px; line-height:1.55; }
+      .prog { width:100%; min-width:0; padding:12px 14px; }
+
+      .layout { display:flex; flex-direction:column; gap:22px; margin-top:18px; }
+      .sec-head { margin-bottom:10px; }
+      .swipe { display:inline; font-size:11px; }
+
+      /* Agenda en lista con detalle desplegable */
+      .days.list { display:flex; flex-direction:column; gap:8px; }
+      .row { appearance:none; width:100%; text-align:left; display:grid; grid-template-columns:56px 1fr 16px; gap:12px; align-items:center; padding:12px; min-height:70px; background:var(--card); border:1px solid var(--line); border-radius:14px; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .1s; }
+      .row:active { transform:scale(.99); }
+      .row[aria-expanded="true"] { border:1.5px solid var(--black); border-bottom-left-radius:0; border-bottom-right-radius:0; }
+      .row .rd { text-align:center; border-right:1px solid var(--line-2); padding-right:10px; }
+      .row .rd small { display:block; font-size:9.5px; letter-spacing:.1em; font-weight:800; color:var(--muted); }
+      .row .rd b { display:block; font-size:22px; font-weight:850; letter-spacing:-.04em; line-height:1.05; }
+      .row .rd b.txt { font-size:10px; letter-spacing:.04em; line-height:1.2; padding:4px 0; word-break:break-word; }
+      .row .rf { min-width:0; }
+      .row .rf strong { display:block; font-size:14.5px; line-height:1.25; font-weight:750; }
+      .row .rf .st { display:inline-block; margin-top:6px; }
+      .row .chev { font-size:20px; line-height:1; color:var(--soft); transition:transform .2s; justify-self:end; }
+      .row[aria-expanded="true"] .chev { transform:rotate(90deg); color:var(--ink); }
+      .row.milestone { background:var(--black); color:#fff; border-color:var(--black); }
+      .row.milestone .rd { border-color:#333; }
+      .row.milestone .rd small, .row.milestone .chev { color:#bdbdbd; }
+      .row.holiday { border-style:dashed; background:repeating-linear-gradient(135deg,#f6f6f5 0 8px,#efefee 8px 16px); color:var(--muted); min-height:56px; cursor:default; }
+      .row.holiday .chev { visibility:hidden; }
+      .row.verify { border-style:dashed; border-color:#6e6e6e; }
+      .row.done { background:#e2e2e1; }
+      .rowdetail { margin-top:-8px; padding:16px 14px; background:var(--card); border:1.5px solid var(--black); border-top:1px solid var(--line-2); border-radius:0 0 14px 14px; animation:drop .18s ease-out; }
+      @keyframes drop { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:none; } }
+      .rowdetail .q { margin:0 0 14px; font-size:15px; }
+      .rowdetail .plan { grid-template-columns:1fr; gap:10px; margin-bottom:14px; }
+      .rowdetail .card { padding:14px; background:var(--paper); border:0; }
+      .rowdetail .card ol, .rowdetail .card p { font-size:14.5px; line-height:1.55; }
+      .rowdetail .close-grid { grid-template-columns:1fr; gap:10px; }
+      .rowdetail .blk p { font-size:13.5px; }
+      .detail { display:none; }
+
+      /* Panel lateral apilado y plegable */
+      .side { padding-top:0; gap:10px; }
+      .lt.fold { padding:0; }
+      .fold > summary { padding:14px 18px; min-height:60px; }
+      .lt.fold > summary h2 { margin:4px 0 0; }
+      .lt.fold[open] > summary { margin-bottom:0; }
+      .fold-in { padding:0 18px 12px; }
+      .axis, .rule, .doc { font-size:13.5px; }
+      footer { padding:0 16px calc(90px + env(safe-area-inset-bottom)); flex-direction:column; gap:4px; }
+
+      /* Botón flotante "Ir a hoy" */
+      .fab { position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom)); z-index:30; align-items:center; gap:8px; padding:12px 18px; min-height:48px; border:0; border-radius:99px; background:var(--black); color:#fff; font-size:13px; font-weight:800; letter-spacing:.04em; box-shadow:0 10px 30px rgba(0,0,0,.25); cursor:pointer; }
+      .fab.show { display:inline-flex; }
+      .fab i { width:9px; height:9px; border:2px solid #fff; border-radius:50%; display:block; }
     }
   </style>
 </head>
@@ -200,7 +281,7 @@
       <div class="sep"></div>
       <div><strong>ASESORÍA PREPRENSA</strong><span>Roadmap operativo · Fase 1</span></div>
     </div>
-    <div class="upd"><i></i><span id="upd-text">Actualizado · 17 nov 2026</span></div>
+    <div class="upd" id="upd" data-short="17 NOV"><i></i><span id="upd-text">Actualizado · 17 nov 2026</span></div>
   </div></header>
 
   <main class="body">
@@ -219,6 +300,8 @@
       </div>
     </section>
 
+    <section class="mphase" id="mphase" aria-label="Avance de la Fase 1"></section>
+
     <nav class="nav" id="nav" aria-label="Semanas del roadmap"></nav>
 
     <div class="top">
@@ -236,7 +319,7 @@
 
     <div class="layout">
       <div>
-        <div class="sec-head"><h2 class="sec-title">CALENDARIO DE TRABAJO</h2><span class="swipe">Desliza para recorrer</span></div>
+        <div class="sec-head"><h2 class="sec-title">CALENDARIO DE TRABAJO</h2><span class="swipe">Desliza ← → para cambiar de semana</span></div>
         <div class="days" id="days"></div>
         <div class="detail" id="detail" aria-live="polite"></div>
       </div>
@@ -256,33 +339,37 @@
           </div>
         </div>
 
-        <div class="lt">
-          <div class="kicker">Qué se revisa</div>
-          <h2>Cinco ejes del diagnóstico</h2>
+        <details class="lt fold" data-desk-open>
+          <summary><div><div class="kicker">Qué se revisa</div><h2>Cinco ejes del diagnóstico</h2></div><span class="pm">+</span></summary>
+          <div class="fold-in">
           <div class="axis"><b>01</b><span>Dimensionamiento operativo por fase</span></div>
           <div class="axis"><b>02</b><span>Cobertura técnica del equipo</span></div>
           <div class="axis"><b>03</b><span>Plan de transición desde proveedores externos</span></div>
           <div class="axis"><b>04</b><span>Herramientas técnicas clave y decisiones pendientes</span></div>
           <div class="axis"><b>05</b><span>Configuración inicial de Bynder para el flujo de preprensa</span></div>
-        </div>
+          </div>
+        </details>
 
-        <details class="docs">
+        <details class="docs fold">
           <summary><div><div class="kicker">Insumos</div><h2>Documentación requerida</h2></div><span class="pm">+</span></summary>
           <div class="docs-in" id="docs"></div>
         </details>
 
-        <div class="lt">
-          <div class="kicker">Reglas de la fase</div>
-          <h2>Principios de trabajo</h2>
+        <details class="lt fold" data-desk-open>
+          <summary><div><div class="kicker">Reglas de la fase</div><h2>Principios de trabajo</h2></div><span class="pm">+</span></summary>
+          <div class="fold-in">
           <div class="rule"><strong>LA FASE SE GANA EN NOVIEMBRE</strong>Si documentos y entrevistas quedan cerrados antes del 4 de diciembre, diciembre alcanza para analizar y enero para escribir.</div>
           <div class="rule"><strong>CALENDARIO REAL</strong>De nueve semanas, unas seis son efectivas por festivos y temporada de fin de año.</div>
           <div class="rule"><strong>LO QUE NO EXISTE TAMBIÉN ES HALLAZGO</strong>Si un documento no está, se registra como brecha y no frena el avance.</div>
           <div class="rule"><strong>MISMO RIGOR PARA TODO PROVEEDOR</strong>El análisis de transición se hace con criterios idénticos para cada proveedor externo.</div>
           <div class="rule"><strong>DECISOR EN LOS MOMENTOS CLAVE</strong>Presente en el kickoff y en la presentación final.</div>
-        </div>
+          </div>
+        </details>
       </aside>
     </div>
   </main>
+
+  <button class="fab" id="fab" type="button"><i></i>Ir a hoy</button>
 
   <footer>
     <span>Asesoría Preprensa Leonisa · Fase 1 de 4 · Documento de trabajo confidencial</span>
@@ -295,8 +382,9 @@
      status: 'Planificado' | 'Por agendar' | 'En curso' | 'Cerrado' | 'Hito' | 'Festivo' | 'Verificar'
      Cierre de jornada (opcional): hallazgos, decisiones, pendientes.
      ===================================================================== */
-  const TODAY = '2026-11-17';
-  const UPDATED = 'Actualizado · 17 nov 2026';
+  // Fecha real en Bogotá (marca "Hoy"); los estados se actualizan a mano.
+  const TODAY = new Intl.DateTimeFormat('en-CA', { timeZone:'America/Bogota' }).format(new Date());
+  const UPDATED = 'Actualizado · 18 nov 2026';
 
   const PHASE = { start:'2026-11-02', end:'2027-01-22' };
 
@@ -570,7 +658,7 @@
 
   function buildNav() {
     $('#nav').innerHTML = WEEKS.map(w => `<button class="tab" type="button" data-week="${w.id}">${w.tab}</button>`).join('');
-    $('#nav').querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => go(b.dataset.week)));
+    $('#nav').querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => { go(b.dataset.week); if (mq.matches) window.scrollTo({ top: document.querySelector('.top').getBoundingClientRect().top + window.scrollY - 112, behavior:'smooth' }); }));
   }
 
   function buildDocs() {
@@ -584,37 +672,16 @@
     try { history.replaceState(null, '', '#' + id); } catch (e) {}
   }
 
-  function render() {
-    const w = WEEKS.find(x => x.id === active);
-    if (!selected) selected = pickDefaultDay(w);
-    const work = w.days.filter(d => !d.holiday);
-    const closed = work.filter(d => isDone(d.status)).length;
-    $('#w-kicker').innerHTML = `${w.tab.split(' · ')[0]} &nbsp;/&nbsp; ${w.range}`;
-    $('#w-title').textContent = w.title;
-    $('#w-obj').textContent = w.objective;
-    $('#w-count').textContent = `${closed}/${work.length}`;
-    $('#w-bar').style.width = `${work.length ? closed / work.length * 100 : 0}%`;
-    $('#w-hours').textContent = `Dedicación estimada: ${w.hours}`;
-    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-pressed', String(t.dataset.week === active)));
-    document.querySelectorAll('.tl-seg').forEach(t => t.classList.toggle('on', t.dataset.week === active));
+  const mq = window.matchMedia('(max-width: 640px)');
+  const todayWeek = (WEEKS.find(w => TODAY >= w.start && TODAY <= w.end) || WEEKS[0]).id;
+  let collapsed = false;
+  const MONTHS = ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const short = s => { const d = toDate(s); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; };
 
-    $('#days').innerHTML = w.days.map(d => `
-      <button class="day ${dayClass(d)}" type="button" data-id="${d.id}" aria-pressed="${d.id === selected}">
-        <div class="day-top"><div><span class="wd">${d.weekday}</span><span class="dt">${d.date}</span></div><span class="st ${stClass(d.status)}">${d.status}</span></div>
-        <div class="focus">${d.focus}</div>
-        <div class="dl">${d.deliverable || ''}</div>
-      </button>`).join('');
-    $('#days').querySelectorAll('.day').forEach(b => b.addEventListener('click', () => { selected = b.dataset.id; render(); }));
-
-    const d = w.days.find(x => x.id === selected);
-    if (d.holiday) {
-      $('#detail').innerHTML = `<div class="d-head"><div><div class="kicker">${d.weekday} · ${d.date}</div><h2>Festivo</h2></div><span class="st s-holiday">Festivo</span></div><p class="q">${d.deliverable}. Sin actividades programadas.</p>`;
-      return;
-    }
+  function detailBody(d) {
     const pend = 'Pendiente de cierre';
     const blk = (t, v) => `<div class="blk"><h3>${t}</h3><p class="${v ? 'filled' : ''}">${v || pend}</p></div>`;
-    $('#detail').innerHTML = `
-      <div class="d-head"><div><div class="kicker">${d.weekday} · ${d.date}</div><h2>${d.focus}</h2></div><span class="st ${stClass(d.status)}">${d.status}</span></div>
+    return `
       <p class="q"><strong>Pregunta central:</strong> ${d.question}</p>
       <div class="plan">
         <div class="card"><h3>TAREAS CONCRETAS</h3><ol>${d.tasks.map(t => `<li>${t}</li>`).join('')}</ol></div>
@@ -628,9 +695,118 @@
       ${d.milestone ? `<div class="note"><strong>HITO DE LA FASE</strong>Este momento se cierra con registro formal de lo presentado, lo acordado y lo pendiente.</div>` : ''}`;
   }
 
+  function renderPhaseCard() {
+    const t0 = toDate('2026-11-17'), t1 = toDate(PHASE.end), now = toDate(TODAY);
+    const pct = Math.max(0, Math.min(100, Math.round((now - t0) / (t1 - t0) * 100)));
+    const pos = s => Math.max(0, Math.min(100, (toDate(s) - t0) / (t1 - t0) * 100));
+    const w = WEEKS.find(x => x.id === todayWeek);
+    const idx = WEEKS.filter(x => x.id !== 'prep').findIndex(x => x.id === todayWeek) + 1;
+    const ms = [{ d:'2026-12-17', n:'Entregable 1' }, { d:'2027-01-21', n:'Entregable 2' }];
+    const nextM = ms.find(m => m.d >= TODAY);
+    const days = nextM ? Math.round((toDate(nextM.d) - now) / MS) : 0;
+    const allDays = WEEKS.flatMap(x => x.days.map(d => ({ ...d, wk:x.id })));
+    const nextHito = allDays.find(d => d.milestone && d.id >= TODAY);
+    $('#mphase').innerHTML = `
+      <div class="mp-top">
+        <div><div class="mp-k">FASE 1 · ${idx > 0 ? `SEMANA ${idx} DE ${WEEKS.length - 1}` : 'PREPARACIÓN'}</div><div class="mp-t">${w.title}</div></div>
+        <div class="mp-pct">${pct}%<small>DEL CALENDARIO</small></div>
+      </div>
+      <div class="mp-track"><div class="mp-fill" style="width:${pct}%"></div>${ms.map(m => `<i class="mp-pin" style="left:${pos(m.d)}%"></i>`).join('')}</div>
+      <div class="mp-dates"><span>17 NOV</span><span>E1 · 17 DIC</span><span>E2 · 21 ENE</span></div>
+      <div class="mp-next">
+        <div class="mp-box"><b>${nextHito ? short(nextHito.id) : '—'}</b><span>Próximo hito · ${nextHito ? nextHito.focus : 'Fase cerrada'}</span></div>
+        <div class="mp-box"><b>${nextM ? (days === 0 ? 'Hoy' : `${days} días`) : '—'}</b><span>${nextM ? `para el ${nextM.n} · ${short(nextM.d)}` : 'Entregables cumplidos'}</span></div>
+      </div>`;
+  }
+
+  function render() {
+    const w = WEEKS.find(x => x.id === active);
+    if (!selected) selected = pickDefaultDay(w);
+    const mobile = mq.matches;
+    const work = w.days.filter(d => !d.holiday);
+    const closed = work.filter(d => isDone(d.status)).length;
+    $('#w-kicker').innerHTML = `${w.tab.split(' · ')[0]} &nbsp;/&nbsp; ${w.range}`;
+    $('#w-title').textContent = w.title;
+    $('#w-obj').textContent = w.objective;
+    $('#w-count').textContent = `${closed}/${work.length}`;
+    $('#w-bar').style.width = `${work.length ? closed / work.length * 100 : 0}%`;
+    $('#w-hours').textContent = `Dedicación estimada: ${w.hours}`;
+    document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-pressed', String(t.dataset.week === active)));
+    document.querySelectorAll('.tl-seg').forEach(t => t.classList.toggle('on', t.dataset.week === active));
+    $('#fab').classList.toggle('show', active !== todayWeek);
+
+    const daysEl = $('#days');
+    daysEl.classList.toggle('list', mobile);
+
+    if (mobile) {
+      daysEl.innerHTML = w.days.map(d => {
+        const m = d.date.match(/^([\d–]+)\s+(\S+)$/);
+        const big = m ? `<b>${m[1]}</b><small>${m[2]}</small>` : `<b class="txt">${d.date}</b>`;
+        const wd = d.weekday.length > 4 ? d.weekday.slice(0, 3) : d.weekday;
+        const open = !d.holiday && !collapsed && d.id === selected;
+        return `<button class="row ${dayClass(d)}" type="button" data-id="${d.id}" aria-expanded="${open}" ${d.holiday ? 'tabindex="-1"' : ''}>
+            <div class="rd"><small>${m ? wd : ''}</small>${big}</div>
+            <div class="rf"><strong>${d.focus}</strong><span class="st ${stClass(d.status)}">${d.status}</span></div>
+            <span class="chev" aria-hidden="true">›</span>
+          </button>${open ? `<div class="rowdetail">${detailBody(d)}</div>` : ''}`;
+      }).join('');
+      daysEl.querySelectorAll('.row').forEach(b => b.addEventListener('click', () => {
+        const d = w.days.find(x => x.id === b.dataset.id);
+        if (d.holiday) return;
+        if (selected === d.id && !collapsed) collapsed = true; else { selected = d.id; collapsed = false; }
+        render();
+        const el = daysEl.querySelector(`[data-id="${d.id}"]`);
+        if (el && !collapsed) {
+          const y = el.getBoundingClientRect().top + window.scrollY - 112;
+          window.scrollTo({ top:y, behavior:'smooth' });
+        }
+      }));
+    } else {
+      daysEl.innerHTML = w.days.map(d => `
+        <button class="day ${dayClass(d)}" type="button" data-id="${d.id}" aria-pressed="${d.id === selected}">
+          <div class="day-top"><div><span class="wd">${d.weekday}</span><span class="dt">${d.date}</span></div><span class="st ${stClass(d.status)}">${d.status}</span></div>
+          <div class="focus">${d.focus}</div>
+          <div class="dl">${d.deliverable || ''}</div>
+        </button>`).join('');
+      daysEl.querySelectorAll('.day').forEach(b => b.addEventListener('click', () => { selected = b.dataset.id; render(); }));
+      const d = w.days.find(x => x.id === selected);
+      $('#detail').innerHTML = d.holiday
+        ? `<div class="d-head"><div><div class="kicker">${d.weekday} · ${d.date}</div><h2>Festivo</h2></div><span class="st s-holiday">Festivo</span></div><p class="q">${d.deliverable}. Sin actividades programadas.</p>`
+        : `<div class="d-head"><div><div class="kicker">${d.weekday} · ${d.date}</div><h2>${d.focus}</h2></div><span class="st ${stClass(d.status)}">${d.status}</span></div>${detailBody(d)}`;
+    }
+
+    // Mantener visible la pestaña activa
+    const tab = document.querySelector(`.tab[data-week="${active}"]`);
+    if (tab) { const nav = $('#nav'); nav.scrollTo({ left: tab.offsetLeft - nav.clientWidth / 2 + tab.clientWidth / 2, behavior:'smooth' }); }
+  }
+
+  function syncFolds() {
+    document.querySelectorAll('details[data-desk-open]').forEach(d => { d.open = !mq.matches; });
+  }
+
+  // Cambio de semana con gesto horizontal (móvil)
+  (function swipe() {
+    let x0 = null, y0 = null;
+    const area = document.querySelector('.layout');
+    area.addEventListener('touchstart', e => { if (!mq.matches) return; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive:true });
+    area.addEventListener('touchend', e => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if (Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.6) return;
+      const i = WEEKS.findIndex(w => w.id === active), j = dx < 0 ? i + 1 : i - 1;
+      if (j < 0 || j >= WEEKS.length) return;
+      collapsed = false; go(WEEKS[j].id);
+      window.scrollTo({ top: document.querySelector('.top').getBoundingClientRect().top + window.scrollY - 120, behavior:'smooth' });
+    }, { passive:true });
+  })();
+
+  $('#fab').addEventListener('click', () => { collapsed = false; go(todayWeek); window.scrollTo({ top:0, behavior:'smooth' }); });
+  mq.addEventListener('change', () => { syncFolds(); render(); });
+
   $('#upd-text').textContent = UPDATED;
-  $('#foot-today').textContent = 'Corte de información: ' + toDate(TODAY).toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' });
-  buildTimeline(); buildNav(); buildDocs();
+  $('#upd').dataset.short = short(TODAY);
+  $('#foot-today').textContent = 'Hoy: ' + toDate(TODAY).toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' });
+  buildTimeline(); buildNav(); buildDocs(); renderPhaseCard(); syncFolds();
   const hash = location.hash.slice(1);
   if (WEEKS.some(w => w.id === hash)) active = hash;
   render();
